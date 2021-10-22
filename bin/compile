@@ -63,7 +63,7 @@ list_node_config | indent
 
 install_bins() {
   local node_engine=$(read_json "$BUILD_DIR/package.json" ".engines.node")
-  local iojs_engine=$(read_json "$BUILD_DIR/package.json" ".engines.iojs")
+  # local iojs_engine=$(read_json "$BUILD_DIR/package.json" ".engines.iojs")
   local npm_engine=$(read_json "$BUILD_DIR/package.json" ".engines.npm")
 
   if [ -n "$iojs_engine" ]; then
@@ -75,8 +75,8 @@ install_bins() {
   echo ""
 
   if [ -n "$iojs_engine" ]; then
-    warn_node_engine "$iojs_engine"
-    install_iojs "$iojs_engine" "$BUILD_DIR/.heroku/node"
+    # warn_node_engine "$iojs_engine"
+    # install_iojs "$iojs_engine" "$BUILD_DIR/.heroku/node"
     echo "Using bundled npm version for iojs compatibility: `npm --version`"
   else
     warn_node_engine "$node_engine"
@@ -85,21 +85,21 @@ install_bins() {
   fi
   warn_old_npm
 
-  if [ -d $CACHE_DIR/node/vendor/nasm ]; then
-    echo "Copying nasm from cache"
-    cp -r $CACHE_DIR/node/vendor/nasm $VENDOR_DIR
-  else
-    echo "Installing nasm from source"
-    NVERSION="2.11"
-    curl http://www.nasm.us/pub/nasm/releasebuilds/$NVERSION/nasm-$NVERSION.tar.gz -s | tar xz
-    cd nasm-$NVERSION
-    ./configure >/dev/null 2>&1 && make >/dev/null 2>&1
+  # if [ -d $CACHE_DIR/node/vendor/nasm ]; then
+  #   echo "Copying nasm from cache"
+  #   cp -r $CACHE_DIR/node/vendor/nasm $VENDOR_DIR
+  # else
+  #   echo "Installing nasm from source"
+  #   NVERSION="2.11"
+  #   curl http://www.nasm.us/pub/nasm/releasebuilds/$NVERSION/nasm-$NVERSION.tar.gz -s | tar xz
+  #   cd nasm-$NVERSION
+  #   ./configure >/dev/null 2>&1 && make >/dev/null 2>&1
 
-    mkdir -p $VENDOR_DIR/nasm/bin
-    mv nasm $VENDOR_DIR/nasm/bin
-    chmod +x $VENDOR_DIR/nasm/bin/*
-  fi
-  PATH=$PATH:$VENDOR_DIR/nasm/bin
+  #   mkdir -p $VENDOR_DIR/nasm/bin
+  #   mv nasm $VENDOR_DIR/nasm/bin
+  #   chmod +x $VENDOR_DIR/nasm/bin/*
+  # fi
+  # PATH=$PATH:$VENDOR_DIR/nasm/bin
 
 }
 
